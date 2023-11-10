@@ -2221,15 +2221,17 @@ static HAL_StatusTypeDef CRYP_AES_Encrypt_IT(CRYP_HandleTypeDef *hcryp)
     /* Enable CRYP */
     __HAL_CRYP_ENABLE(hcryp);
 
-    /* Write the input block in the IN FIFO */
-    hcryp->Instance->DINR  = *(uint32_t *)(hcryp->pCrypInBuffPtr + hcryp->CrypInCount);
+    /* Increment the pointer before writing the input block in the IN FIFO to make sure that
+       when Computation Completed IRQ fires, the hcryp->CrypInCount has always a consistent value
+       and it is ready for the next operation. */
     hcryp->CrypInCount++;
-    hcryp->Instance->DINR  = *(uint32_t *)(hcryp->pCrypInBuffPtr + hcryp->CrypInCount);
+    hcryp->Instance->DINR  = *(uint32_t *)(hcryp->pCrypInBuffPtr + (hcryp->CrypInCount - 1U));
     hcryp->CrypInCount++;
-    hcryp->Instance->DINR  = *(uint32_t *)(hcryp->pCrypInBuffPtr + hcryp->CrypInCount);
+    hcryp->Instance->DINR  = *(uint32_t *)(hcryp->pCrypInBuffPtr + (hcryp->CrypInCount - 1U));
     hcryp->CrypInCount++;
-    hcryp->Instance->DINR  = *(uint32_t *)(hcryp->pCrypInBuffPtr + hcryp->CrypInCount);
+    hcryp->Instance->DINR  = *(uint32_t *)(hcryp->pCrypInBuffPtr + (hcryp->CrypInCount - 1U));
     hcryp->CrypInCount++;
+    hcryp->Instance->DINR  = *(uint32_t *)(hcryp->pCrypInBuffPtr + (hcryp->CrypInCount - 1U));
   }
   else
   {
@@ -2522,15 +2524,17 @@ static HAL_StatusTypeDef CRYP_AES_Decrypt_IT(CRYP_HandleTypeDef *hcryp)
     /* Enable CRYP */
     __HAL_CRYP_ENABLE(hcryp);
 
-    /* Write the input block in the IN FIFO */
-    hcryp->Instance->DINR  = *(uint32_t *)(hcryp->pCrypInBuffPtr + hcryp->CrypInCount);
+    /* Increment the pointer before writing the input block in the IN FIFO to make sure that
+       when Computation Completed IRQ fires, the hcryp->CrypInCount has always a consistent value
+       and it is ready for the next operation. */
     hcryp->CrypInCount++;
-    hcryp->Instance->DINR  = *(uint32_t *)(hcryp->pCrypInBuffPtr + hcryp->CrypInCount);
+    hcryp->Instance->DINR  = *(uint32_t *)(hcryp->pCrypInBuffPtr + (hcryp->CrypInCount - 1U));
     hcryp->CrypInCount++;
-    hcryp->Instance->DINR  = *(uint32_t *)(hcryp->pCrypInBuffPtr + hcryp->CrypInCount);
+    hcryp->Instance->DINR  = *(uint32_t *)(hcryp->pCrypInBuffPtr + (hcryp->CrypInCount - 1U));
     hcryp->CrypInCount++;
-    hcryp->Instance->DINR  = *(uint32_t *)(hcryp->pCrypInBuffPtr + hcryp->CrypInCount);
+    hcryp->Instance->DINR  = *(uint32_t *)(hcryp->pCrypInBuffPtr + (hcryp->CrypInCount - 1U));
     hcryp->CrypInCount++;
+    hcryp->Instance->DINR  = *(uint32_t *)(hcryp->pCrypInBuffPtr + (hcryp->CrypInCount - 1U));
   }
   else
   {
