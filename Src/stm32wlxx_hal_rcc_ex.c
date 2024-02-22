@@ -193,6 +193,9 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClk
       status = ret;
     }
 
+    /* Disable write access to Backup domain */
+    HAL_PWR_DisableBkUpAccess();
+
   }
 
   /*-------------------- USART1 clock source configuration -------------------*/
