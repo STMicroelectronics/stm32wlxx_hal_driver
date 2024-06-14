@@ -601,7 +601,12 @@ HAL_StatusTypeDef HAL_I2C_Init(I2C_HandleTypeDef *hi2c)
   /* Configure I2Cx: Addressing Master mode */
   if (hi2c->Init.AddressingMode == I2C_ADDRESSINGMODE_10BIT)
   {
-    hi2c->Instance->CR2 = (I2C_CR2_ADD10);
+    SET_BIT(hi2c->Instance->CR2, I2C_CR2_ADD10);;
+  }
+  else
+  {
+    /* Clear the I2C ADD10 bit */
+    CLEAR_BIT(hi2c->Instance->CR2, I2C_CR2_ADD10);
   }
   /* Enable the AUTOEND by default, and enable NACK (should be disable only during Slave process */
   hi2c->Instance->CR2 |= (I2C_CR2_AUTOEND | I2C_CR2_NACK);
