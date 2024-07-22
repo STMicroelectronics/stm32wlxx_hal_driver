@@ -203,9 +203,12 @@ typedef struct __I2C_HandleTypeDef
   HAL_StatusTypeDef(*XferISR)(struct __I2C_HandleTypeDef *hi2c, uint32_t ITFlags, uint32_t ITSources);
   /*!< I2C transfer IRQ handler function pointer */
 
+#if defined(HAL_DMA_MODULE_ENABLED)
   DMA_HandleTypeDef          *hdmatx;        /*!< I2C Tx DMA handle parameters              */
 
   DMA_HandleTypeDef          *hdmarx;        /*!< I2C Rx DMA handle parameters              */
+
+#endif /*HAL_DMA_MODULE_ENABLED*/
 
   HAL_LockTypeDef            Lock;           /*!< I2C locking object                        */
 
@@ -661,6 +664,7 @@ HAL_StatusTypeDef HAL_I2C_EnableListen_IT(I2C_HandleTypeDef *hi2c);
 HAL_StatusTypeDef HAL_I2C_DisableListen_IT(I2C_HandleTypeDef *hi2c);
 HAL_StatusTypeDef HAL_I2C_Master_Abort_IT(I2C_HandleTypeDef *hi2c, uint16_t DevAddress);
 
+#if defined(HAL_DMA_MODULE_ENABLED)
 /******* Non-Blocking mode: DMA */
 HAL_StatusTypeDef HAL_I2C_Master_Transmit_DMA(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint8_t *pData,
                                               uint16_t Size);
@@ -681,6 +685,7 @@ HAL_StatusTypeDef HAL_I2C_Slave_Seq_Transmit_DMA(I2C_HandleTypeDef *hi2c, uint8_
                                                  uint32_t XferOptions);
 HAL_StatusTypeDef HAL_I2C_Slave_Seq_Receive_DMA(I2C_HandleTypeDef *hi2c, uint8_t *pData, uint16_t Size,
                                                 uint32_t XferOptions);
+#endif /*HAL_DMA_MODULE_ENABLED*/
 /**
   * @}
   */

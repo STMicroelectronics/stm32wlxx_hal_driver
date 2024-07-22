@@ -401,8 +401,10 @@
   */
 
 /* Private macro -------------------------------------------------------------*/
+#if defined(HAL_DMA_MODULE_ENABLED)
 /* Macro to get remaining data to transfer on DMA side */
 #define I2C_GET_DMA_REMAIN_DATA(__HANDLE__)     __HAL_DMA_GET_COUNTER(__HANDLE__)
+#endif /*HAL_DMA_MODULE_ENABLED*/
 
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
@@ -410,6 +412,7 @@
 /** @defgroup I2C_Private_Functions I2C Private Functions
   * @{
   */
+#if defined(HAL_DMA_MODULE_ENABLED)
 /* Private functions to handle DMA transfer */
 static void I2C_DMAMasterTransmitCplt(DMA_HandleTypeDef *hdma);
 static void I2C_DMAMasterReceiveCplt(DMA_HandleTypeDef *hdma);
@@ -417,6 +420,8 @@ static void I2C_DMASlaveTransmitCplt(DMA_HandleTypeDef *hdma);
 static void I2C_DMASlaveReceiveCplt(DMA_HandleTypeDef *hdma);
 static void I2C_DMAError(DMA_HandleTypeDef *hdma);
 static void I2C_DMAAbort(DMA_HandleTypeDef *hdma);
+
+#endif /*HAL_DMA_MODULE_ENABLED*/
 
 /* Private functions to handle IT transfer */
 static void I2C_ITAddrCplt(I2C_HandleTypeDef *hi2c, uint32_t ITFlags);
@@ -442,12 +447,14 @@ static HAL_StatusTypeDef I2C_Mem_ISR_IT(struct __I2C_HandleTypeDef *hi2c, uint32
                                         uint32_t ITSources);
 static HAL_StatusTypeDef I2C_Slave_ISR_IT(struct __I2C_HandleTypeDef *hi2c, uint32_t ITFlags,
                                           uint32_t ITSources);
+#if defined(HAL_DMA_MODULE_ENABLED)
 static HAL_StatusTypeDef I2C_Master_ISR_DMA(struct __I2C_HandleTypeDef *hi2c, uint32_t ITFlags,
                                             uint32_t ITSources);
 static HAL_StatusTypeDef I2C_Mem_ISR_DMA(struct __I2C_HandleTypeDef *hi2c, uint32_t ITFlags,
                                          uint32_t ITSources);
 static HAL_StatusTypeDef I2C_Slave_ISR_DMA(struct __I2C_HandleTypeDef *hi2c, uint32_t ITFlags,
                                            uint32_t ITSources);
+#endif /*HAL_DMA_MODULE_ENABLED*/
 
 /* Private functions to handle flags during polling transfer */
 static HAL_StatusTypeDef I2C_WaitOnFlagUntilTimeout(I2C_HandleTypeDef *hi2c, uint32_t Flag, FlagStatus Status,
@@ -1938,6 +1945,7 @@ HAL_StatusTypeDef HAL_I2C_Slave_Receive_IT(I2C_HandleTypeDef *hi2c, uint8_t *pDa
   }
 }
 
+#if defined(HAL_DMA_MODULE_ENABLED)
 /**
   * @brief  Transmit in master mode an amount of data in non-blocking mode with DMA
   * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
@@ -2486,6 +2494,8 @@ HAL_StatusTypeDef HAL_I2C_Slave_Receive_DMA(I2C_HandleTypeDef *hi2c, uint8_t *pD
     return HAL_BUSY;
   }
 }
+#endif /*HAL_DMA_MODULE_ENABLED*/
+
 /**
   * @brief  Write an amount of data in blocking mode to a specific memory address
   * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
@@ -2935,6 +2945,8 @@ HAL_StatusTypeDef HAL_I2C_Mem_Read_IT(I2C_HandleTypeDef *hi2c, uint16_t DevAddre
     return HAL_BUSY;
   }
 }
+
+#if defined(HAL_DMA_MODULE_ENABLED)
 /**
   * @brief  Write an amount of data in non-blocking mode with DMA to a specific memory address
   * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
@@ -3226,6 +3238,7 @@ HAL_StatusTypeDef HAL_I2C_Mem_Read_DMA(I2C_HandleTypeDef *hi2c, uint16_t DevAddr
     return HAL_BUSY;
   }
 }
+#endif /*HAL_DMA_MODULE_ENABLED*/
 
 /**
   * @brief  Checks if target device is ready for communication.
@@ -3465,6 +3478,7 @@ HAL_StatusTypeDef HAL_I2C_Master_Seq_Transmit_IT(I2C_HandleTypeDef *hi2c, uint16
   }
 }
 
+#if defined(HAL_DMA_MODULE_ENABLED)
 /**
   * @brief  Sequential transmit in master I2C mode an amount of data in non-blocking mode with DMA.
   * @note   This interface allow to manage repeated start condition when a direction change during transfer
@@ -3660,6 +3674,7 @@ HAL_StatusTypeDef HAL_I2C_Master_Seq_Transmit_DMA(I2C_HandleTypeDef *hi2c, uint1
     return HAL_BUSY;
   }
 }
+#endif /*HAL_DMA_MODULE_ENABLED*/
 
 /**
   * @brief  Sequential receive in master I2C mode an amount of data in non-blocking mode with Interrupt
@@ -3748,6 +3763,7 @@ HAL_StatusTypeDef HAL_I2C_Master_Seq_Receive_IT(I2C_HandleTypeDef *hi2c, uint16_
   }
 }
 
+#if defined(HAL_DMA_MODULE_ENABLED)
 /**
   * @brief  Sequential receive in master I2C mode an amount of data in non-blocking mode with DMA
   * @note   This interface allow to manage repeated start condition when a direction change during transfer
@@ -3915,6 +3931,7 @@ HAL_StatusTypeDef HAL_I2C_Master_Seq_Receive_DMA(I2C_HandleTypeDef *hi2c, uint16
     return HAL_BUSY;
   }
 }
+#endif /*HAL_DMA_MODULE_ENABLED*/
 
 /**
   * @brief  Sequential transmit in slave/device I2C mode an amount of data in non-blocking mode with Interrupt
@@ -3956,6 +3973,7 @@ HAL_StatusTypeDef HAL_I2C_Slave_Seq_Transmit_IT(I2C_HandleTypeDef *hi2c, uint8_t
       /* Disable associated Interrupts */
       I2C_Disable_IRQ(hi2c, I2C_XFER_RX_IT);
 
+#if defined(HAL_DMA_MODULE_ENABLED)
       /* Abort DMA Xfer if any */
       if ((hi2c->Instance->CR1 & I2C_CR1_RXDMAEN) == I2C_CR1_RXDMAEN)
       {
@@ -3975,6 +3993,7 @@ HAL_StatusTypeDef HAL_I2C_Slave_Seq_Transmit_IT(I2C_HandleTypeDef *hi2c, uint8_t
           }
         }
       }
+#endif /*HAL_DMA_MODULE_ENABLED*/
     }
 
     hi2c->State     = HAL_I2C_STATE_BUSY_TX_LISTEN;
@@ -4016,6 +4035,7 @@ HAL_StatusTypeDef HAL_I2C_Slave_Seq_Transmit_IT(I2C_HandleTypeDef *hi2c, uint8_t
   }
 }
 
+#if defined(HAL_DMA_MODULE_ENABLED)
 /**
   * @brief  Sequential transmit in slave/device I2C mode an amount of data in non-blocking mode with DMA
   * @note   This interface allow to manage repeated start condition when a direction change during transfer
@@ -4199,6 +4219,7 @@ HAL_StatusTypeDef HAL_I2C_Slave_Seq_Transmit_DMA(I2C_HandleTypeDef *hi2c, uint8_
     return HAL_ERROR;
   }
 }
+#endif /*HAL_DMA_MODULE_ENABLED*/
 
 /**
   * @brief  Sequential receive in slave/device I2C mode an amount of data in non-blocking mode with Interrupt
@@ -4240,6 +4261,7 @@ HAL_StatusTypeDef HAL_I2C_Slave_Seq_Receive_IT(I2C_HandleTypeDef *hi2c, uint8_t 
       /* Disable associated Interrupts */
       I2C_Disable_IRQ(hi2c, I2C_XFER_TX_IT);
 
+#if defined(HAL_DMA_MODULE_ENABLED)
       if ((hi2c->Instance->CR1 & I2C_CR1_TXDMAEN) == I2C_CR1_TXDMAEN)
       {
         hi2c->Instance->CR1 &= ~I2C_CR1_TXDMAEN;
@@ -4259,6 +4281,7 @@ HAL_StatusTypeDef HAL_I2C_Slave_Seq_Receive_IT(I2C_HandleTypeDef *hi2c, uint8_t 
           }
         }
       }
+#endif /*HAL_DMA_MODULE_ENABLED*/
     }
 
     hi2c->State     = HAL_I2C_STATE_BUSY_RX_LISTEN;
@@ -4300,6 +4323,7 @@ HAL_StatusTypeDef HAL_I2C_Slave_Seq_Receive_IT(I2C_HandleTypeDef *hi2c, uint8_t 
   }
 }
 
+#if defined(HAL_DMA_MODULE_ENABLED)
 /**
   * @brief  Sequential receive in slave/device I2C mode an amount of data in non-blocking mode with DMA
   * @note   This interface allow to manage repeated start condition when a direction change during transfer
@@ -4483,6 +4507,7 @@ HAL_StatusTypeDef HAL_I2C_Slave_Seq_Receive_DMA(I2C_HandleTypeDef *hi2c, uint8_t
     return HAL_ERROR;
   }
 }
+#endif /*HAL_DMA_MODULE_ENABLED*/
 
 /**
   * @brief  Enable the Address listen mode with Interrupt.
@@ -5330,6 +5355,7 @@ static HAL_StatusTypeDef I2C_Slave_ISR_IT(struct __I2C_HandleTypeDef *hi2c, uint
   return HAL_OK;
 }
 
+#if defined(HAL_DMA_MODULE_ENABLED)
 /**
   * @brief  Interrupt Sub-Routine which handle the Interrupt Flags Master Mode with DMA.
   * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
@@ -5748,6 +5774,7 @@ static HAL_StatusTypeDef I2C_Slave_ISR_DMA(struct __I2C_HandleTypeDef *hi2c, uin
 
   return HAL_OK;
 }
+#endif /*HAL_DMA_MODULE_ENABLED*/
 
 /**
   * @brief  Master sends target device address followed by internal memory address for write request.
@@ -6020,6 +6047,7 @@ static void I2C_ITSlaveSeqCplt(I2C_HandleTypeDef *hi2c)
   /* Reset I2C handle mode */
   hi2c->Mode = HAL_I2C_MODE_NONE;
 
+#if defined(HAL_DMA_MODULE_ENABLED)
   /* If a DMA is ongoing, Update handle size context */
   if (I2C_CHECK_IT_SOURCE(tmpcr1value, I2C_CR1_TXDMAEN) != RESET)
   {
@@ -6035,6 +6063,7 @@ static void I2C_ITSlaveSeqCplt(I2C_HandleTypeDef *hi2c)
   {
     /* Do nothing */
   }
+#endif /*HAL_DMA_MODULE_ENABLED*/
 
   if (hi2c->State == HAL_I2C_STATE_BUSY_TX_LISTEN)
   {
@@ -6265,6 +6294,7 @@ static void I2C_ITSlaveCplt(I2C_HandleTypeDef *hi2c, uint32_t ITFlags)
   /* Flush TX register */
   I2C_Flush_TXDR(hi2c);
 
+#if defined(HAL_DMA_MODULE_ENABLED)
   /* If a DMA is ongoing, Update handle size context */
   if (I2C_CHECK_IT_SOURCE(tmpcr1value, I2C_CR1_TXDMAEN) != RESET)
   {
@@ -6290,6 +6320,7 @@ static void I2C_ITSlaveCplt(I2C_HandleTypeDef *hi2c, uint32_t ITFlags)
   {
     /* Do nothing */
   }
+#endif /*HAL_DMA_MODULE_ENABLED*/
 
   /* Store Last receive data if any */
   if (I2C_CHECK_FLAG(tmpITFlags, I2C_FLAG_RXNE) != RESET)
@@ -6495,7 +6526,10 @@ static void I2C_ITListenCplt(I2C_HandleTypeDef *hi2c, uint32_t ITFlags)
 static void I2C_ITError(I2C_HandleTypeDef *hi2c, uint32_t ErrorCode)
 {
   HAL_I2C_StateTypeDef tmpstate = hi2c->State;
+
+#if defined(HAL_DMA_MODULE_ENABLED)
   uint32_t tmppreviousstate;
+#endif /*HAL_DMA_MODULE_ENABLED*/
 
   /* Reset handle parameters */
   hi2c->Mode          = HAL_I2C_MODE_NONE;
@@ -6549,8 +6583,10 @@ static void I2C_ITError(I2C_HandleTypeDef *hi2c, uint32_t ErrorCode)
     hi2c->XferISR       = NULL;
   }
 
+#if defined(HAL_DMA_MODULE_ENABLED)
   /* Abort DMA TX transfer if any */
   tmppreviousstate = hi2c->PreviousState;
+
   if ((hi2c->hdmatx != NULL) && ((tmppreviousstate == I2C_STATE_MASTER_BUSY_TX) || \
                                  (tmppreviousstate == I2C_STATE_SLAVE_BUSY_TX)))
   {
@@ -6611,6 +6647,7 @@ static void I2C_ITError(I2C_HandleTypeDef *hi2c, uint32_t ErrorCode)
     }
   }
   else
+#endif /*HAL_DMA_MODULE_ENABLED*/
   {
     I2C_TreatErrorCallback(hi2c);
   }
@@ -6675,6 +6712,7 @@ static void I2C_Flush_TXDR(I2C_HandleTypeDef *hi2c)
   }
 }
 
+#if defined(HAL_DMA_MODULE_ENABLED)
 /**
   * @brief  DMA I2C master transmit process complete callback.
   * @param  hdma DMA handle
@@ -6725,6 +6763,7 @@ static void I2C_DMAMasterTransmitCplt(DMA_HandleTypeDef *hdma)
   }
 }
 
+
 /**
   * @brief  DMA I2C slave transmit process complete callback.
   * @param  hdma DMA handle
@@ -6752,6 +6791,7 @@ static void I2C_DMASlaveTransmitCplt(DMA_HandleTypeDef *hdma)
     /* So STOP condition should be manage through Interrupt treatment */
   }
 }
+
 
 /**
   * @brief DMA I2C master receive process complete callback.
@@ -6803,6 +6843,7 @@ static void I2C_DMAMasterReceiveCplt(DMA_HandleTypeDef *hdma)
   }
 }
 
+
 /**
   * @brief  DMA I2C slave receive process complete callback.
   * @param  hdma DMA handle
@@ -6831,6 +6872,7 @@ static void I2C_DMASlaveReceiveCplt(DMA_HandleTypeDef *hdma)
   }
 }
 
+
 /**
   * @brief  DMA I2C communication error callback.
   * @param hdma DMA handle
@@ -6847,6 +6889,7 @@ static void I2C_DMAError(DMA_HandleTypeDef *hdma)
   /* Call the corresponding callback to inform upper layer of End of Transfer */
   I2C_ITError(hi2c, HAL_I2C_ERROR_DMA);
 }
+
 
 /**
   * @brief DMA I2C communication abort callback
@@ -6871,6 +6914,8 @@ static void I2C_DMAAbort(DMA_HandleTypeDef *hdma)
 
   I2C_TreatErrorCallback(hi2c);
 }
+
+#endif /*HAL_DMA_MODULE_ENABLED*/
 
 /**
   * @brief  This function handles I2C Communication Timeout. It waits
@@ -7251,34 +7296,11 @@ static void I2C_Enable_IRQ(I2C_HandleTypeDef *hi2c, uint16_t InterruptRequest)
 {
   uint32_t tmpisr = 0U;
 
-  if ((hi2c->XferISR == I2C_Master_ISR_DMA) || \
-      (hi2c->XferISR == I2C_Slave_ISR_DMA))
-  {
-    if ((InterruptRequest & I2C_XFER_LISTEN_IT) == I2C_XFER_LISTEN_IT)
-    {
-      /* Enable ERR, STOP, NACK and ADDR interrupts */
-      tmpisr |= I2C_IT_ADDRI | I2C_IT_STOPI | I2C_IT_NACKI | I2C_IT_ERRI;
-    }
-
-    if (InterruptRequest == I2C_XFER_ERROR_IT)
-    {
-      /* Enable ERR and NACK interrupts */
-      tmpisr |= I2C_IT_ERRI | I2C_IT_NACKI;
-    }
-
-    if (InterruptRequest == I2C_XFER_CPLT_IT)
-    {
-      /* Enable STOP interrupts */
-      tmpisr |= (I2C_IT_STOPI | I2C_IT_TCI);
-    }
-
-    if (InterruptRequest == I2C_XFER_RELOAD_IT)
-    {
-      /* Enable TC interrupts */
-      tmpisr |= I2C_IT_TCI;
-    }
-  }
-  else
+#if defined(HAL_DMA_MODULE_ENABLED)
+  if ((hi2c->XferISR != I2C_Master_ISR_DMA) && \
+      (hi2c->XferISR != I2C_Slave_ISR_DMA) && \
+      (hi2c->XferISR != I2C_Mem_ISR_DMA))
+#endif /*HAL_DMA_MODULE_ENABLED*/
   {
     if ((InterruptRequest & I2C_XFER_LISTEN_IT) == I2C_XFER_LISTEN_IT)
     {
@@ -7311,11 +7333,53 @@ static void I2C_Enable_IRQ(I2C_HandleTypeDef *hi2c, uint16_t InterruptRequest)
     }
   }
 
+#if defined(HAL_DMA_MODULE_ENABLED)
+  else
+  {
+    if ((InterruptRequest & I2C_XFER_LISTEN_IT) == I2C_XFER_LISTEN_IT)
+    {
+      /* Enable ERR, STOP, NACK and ADDR interrupts */
+      tmpisr |= I2C_IT_ADDRI | I2C_IT_STOPI | I2C_IT_NACKI | I2C_IT_ERRI;
+    }
+
+    if ((InterruptRequest & I2C_XFER_TX_IT) == I2C_XFER_TX_IT)
+    {
+      /* Enable ERR, TC, STOP, NACK and RXI interrupts */
+      tmpisr |= I2C_IT_ERRI | I2C_IT_TCI | I2C_IT_STOPI | I2C_IT_NACKI | I2C_IT_TXI;
+    }
+
+    if ((InterruptRequest & I2C_XFER_RX_IT) == I2C_XFER_RX_IT)
+    {
+      /* Enable ERR, TC, STOP, NACK and TXI interrupts */
+      tmpisr |= I2C_IT_ERRI | I2C_IT_TCI | I2C_IT_STOPI | I2C_IT_NACKI | I2C_IT_RXI;
+    }
+
+    if (InterruptRequest == I2C_XFER_ERROR_IT)
+    {
+      /* Enable ERR and NACK interrupts */
+      tmpisr |= I2C_IT_ERRI | I2C_IT_NACKI;
+    }
+
+    if (InterruptRequest == I2C_XFER_CPLT_IT)
+    {
+      /* Enable STOP interrupts */
+      tmpisr |= (I2C_IT_STOPI | I2C_IT_TCI);
+    }
+
+    if ((hi2c->XferISR != I2C_Mem_ISR_DMA) && (InterruptRequest == I2C_XFER_RELOAD_IT))
+    {
+      /* Enable TC interrupts */
+      tmpisr |= I2C_IT_TCI;
+    }
+  }
+#endif /*HAL_DMA_MODULE_ENABLED*/
+
   /* Enable interrupts only at the end */
   /* to avoid the risk of I2C interrupt handle execution before */
   /* all interrupts requested done */
   __HAL_I2C_ENABLE_IT(hi2c, tmpisr);
 }
+
 
 /**
   * @brief  Manage the disabling of Interrupts.
