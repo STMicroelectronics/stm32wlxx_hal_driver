@@ -671,6 +671,10 @@ HAL_StatusTypeDef HAL_ADC_Init(ADC_HandleTypeDef *hadc)
                  | (hadc->ADCGroupRegularSequencerRanks)
                 );
     }
+    else
+    {
+      /* Nothing to do */
+    }
 
     /* Check back that ADC registers have effectively been configured to      */
     /* ensure of no potential problem of ADC core peripheral clocking.        */
