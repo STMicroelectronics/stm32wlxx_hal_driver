@@ -55,6 +55,9 @@ TIM_HandleTypeDef TimHandle = {.Init = {0}};
 
 /* Private function prototypes -----------------------------------------------*/
 void TIM2_IRQHandler(void);
+#if (USE_HAL_TIM_REGISTER_CALLBACKS == 1U)
+void TimeBase_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
+#endif /* USE_HAL_TIM_REGISTER_CALLBACKS */
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -189,8 +192,15 @@ void HAL_ResumeTick(void)
   * @param  htim : TIM handle
   * @retval None
   */
+#if (USE_HAL_TIM_REGISTER_CALLBACKS == 1U)
+void TimeBase_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+#else
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+#endif /* USE_HAL_TIM_REGISTER_CALLBACKS */
 {
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(htim);
+
   HAL_IncTick();
 }
 
